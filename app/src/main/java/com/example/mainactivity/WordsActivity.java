@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 
@@ -23,7 +22,7 @@ public class WordsActivity extends AppCompatActivity {
     Button confirm;
     EditText editText;
     TextView textView;
-    int wordsLeft;
+    int wordsThatLeft;
     InputStream is;
 
     @Override
@@ -42,7 +41,7 @@ public class WordsActivity extends AppCompatActivity {
         View.OnClickListener listener = new MyClickListener();
         confirm.setOnClickListener(listener);
 
-        // Opens the user requested text file and stores it in 'is'
+        // Inputs the proper text file into the inputStream
         switch(storyPicked) {
             case ("Simple"):
                 is = getResources().openRawResource(R.raw.madlib0_simple);
@@ -67,35 +66,66 @@ public class WordsActivity extends AppCompatActivity {
         // Setting the first hint
         editText = findViewById(R.id.input);
         editText.setHint(story.getNextPlaceholder());
+
+        // Setting the first counter
+        textView = findViewById(R.id.wordsLeft);
+        textView.setText(String.valueOf(story.getPlaceholderCount()));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Putting 'story' into the outState as a serializable
+        outState.putSerializable("Story", story);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+        super.onRestoreInstanceState(inState);
+
+        // On restoration of the instance, gets the serializable with the key "Story"
+        // Sets the hint and the text in the UI
+        story = (Story) inState.getSerializable("Story");
+        editText.setHint(story.getNextPlaceholder());
+        textView.setText(String.valueOf(story.getPlaceholderRemainingCount()));
     }
 
     private class MyClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
 
-            // Assigning the EditText and textView
+            // Assigning the EditText and textView, and assigning values to them
             editText = findViewById(R.id.input);
             textView = findViewById(R.id.wordsLeft);
+            editText.setHint(story.getNextPlaceholder());
+            wordsThatLeft = story.getPlaceholderRemainingCount();
 
             // Loop to keep prompting the user for a new input as long as the placeholder remaining count is positive
-            editText.setHint(story.getNextPlaceholder());
-            wordsLeft = story.getPlaceholderRemainingCount();
-
             if (story.getPlaceholderRemainingCount() > 0) {
-                Log.d(TAG, "Words remaining: " + story.getPlaceholderRemainingCount());
                 String words = editText.getText().toString();
                 story.fillInPlaceholder(words);
-                Log.d(TAG, "Word selected: " + words);
                 editText.setText("");
                 editText.setHint(story.getNextPlaceholder());
+                textView.setText(String.valueOf(story.getPlaceholderRemainingCount()));
             }
 
+            // If there are no more words to be put in, transfers to the next activity using intent
             else {
                 Intent secondIntent = new Intent(WordsActivity.this, DisplayActivity.class);
                 secondIntent.putExtra("story_chosen", story);
                 startActivity(secondIntent);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // Assigning the back button to go back to the first activity
+        Intent intent = new Intent(WordsActivity.this, StartActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 

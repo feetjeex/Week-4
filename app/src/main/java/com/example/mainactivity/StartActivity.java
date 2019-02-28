@@ -11,8 +11,6 @@ import android.widget.Spinner;
 
 public class StartActivity extends AppCompatActivity  {
 
-    private static final String TAG = "StartActivity";
-
     Spinner spinner;
     String[] objects = {"Simple", "Tarzan", "University", "Clothes", "Dance"};
 
@@ -30,15 +28,14 @@ public class StartActivity extends AppCompatActivity  {
         Button btnStart = (Button) findViewById(R.id.button);
         View.OnClickListener listener = new MyClickListener();
         btnStart.setOnClickListener(listener);
-
-
     }
 
     private class MyClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
+
+            // Getting the MadLib the user choose from the spinner
             String storyChosen = spinner.getSelectedItem().toString();
-            Log.d(TAG, "Story selected: " + storyChosen);
 
             // Setting up a new intent to transfer user to the next activity
             Intent intent = new Intent(StartActivity.this, WordsActivity.class);

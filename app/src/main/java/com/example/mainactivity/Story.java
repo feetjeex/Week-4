@@ -32,7 +32,7 @@ public class Story implements Serializable {
         text = "";
         placeholders = new ArrayList<String>();
         filledIn = 0;
-        htmlMode = false;
+        htmlMode = true;
         clear();
     }
 
