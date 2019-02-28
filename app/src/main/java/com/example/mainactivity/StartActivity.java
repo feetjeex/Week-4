@@ -37,12 +37,12 @@ public class StartActivity extends AppCompatActivity  {
     private class MyClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            String story = spinner.getSelectedItem().toString();
-            Log.d(TAG, "Story selected: " + story);
+            String storyChosen = spinner.getSelectedItem().toString();
+            Log.d(TAG, "Story selected: " + storyChosen);
 
             // Setting up a new intent to transfer user to the next activity
             Intent intent = new Intent(StartActivity.this, WordsActivity.class);
-            intent.putExtra("story_chosen", story);
+            intent.putExtra("story_chosen", storyChosen);
             startActivity(intent);
         }
     }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 
@@ -17,13 +18,13 @@ public class WordsActivity extends AppCompatActivity {
     private static final String TAG = "StartActivity";
 
     String storyPicked;
-    String result;
     String wordLeft;
     Story story;
     Button confirm;
     EditText editText;
     TextView textView;
     int wordsLeft;
+    InputStream is;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +32,10 @@ public class WordsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_words);
         //story.clear();
 
-        // Get the intent (which is the MadLib the user selected) from StartActivity and stores it in 'result'
+        // Get the intent (which is the MadLib the user selected) from StartActivity and stores it in 'storyPicked'
         Intent intent = getIntent();
         storyPicked = (String) intent.getSerializableExtra("story_chosen");
-        result = storyPicked;
+        Log.d(TAG, "Story Picked: " + storyPicked);
 
         // Assigning the ok button
         confirm = findViewById(R.id.okAfterInput);
@@ -42,17 +43,37 @@ public class WordsActivity extends AppCompatActivity {
         confirm.setOnClickListener(listener);
 
         // Opens the user requested text file and stores it in 'is'
-        InputStream is = getResources().openRawResource(R.raw.madlib0_simple);
+        switch(storyPicked) {
+            case ("Simple"):
+                is = getResources().openRawResource(R.raw.madlib0_simple);
+                break;
+            case ("Tarzan"):
+                is = getResources().openRawResource(R.raw.madlib1_tarzan);
+                break;
+            case ("University"):
+                is = getResources().openRawResource(R.raw.madlib2_university);
+                break;
+            case ("Clothes"):
+                is = getResources().openRawResource(R.raw.madlib3_clothes);
+                break;
+            case ("Dance"):
+                is = getResources().openRawResource(R.raw.madlib4_dance);
+                break;
+        }
 
         // Construct a new Story object
         story = new Story(is);
+
+        // Setting the first hint
+        editText = findViewById(R.id.input);
+        editText.setHint(story.getNextPlaceholder());
     }
 
     private class MyClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
 
-            // Assigning the EditText
+            // Assigning the EditText and textView
             editText = findViewById(R.id.input);
             textView = findViewById(R.id.wordsLeft);
 
