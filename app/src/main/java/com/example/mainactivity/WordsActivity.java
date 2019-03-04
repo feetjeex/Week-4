@@ -25,6 +25,8 @@ public class WordsActivity extends AppCompatActivity {
     int wordsThatLeft;
     InputStream is;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,19 +104,21 @@ public class WordsActivity extends AppCompatActivity {
             wordsThatLeft = story.getPlaceholderRemainingCount();
 
             // Loop to keep prompting the user for a new input as long as the placeholder remaining count is positive
+            Log.d(TAG, "onClick:" + story.getPlaceholderRemainingCount());
             if (story.getPlaceholderRemainingCount() > 0) {
                 String words = editText.getText().toString();
                 story.fillInPlaceholder(words);
+                Log.d(TAG, "onClick:" + story.getPlaceholderRemainingCount());
                 editText.setText("");
                 editText.setHint(story.getNextPlaceholder());
                 textView.setText(String.valueOf(story.getPlaceholderRemainingCount()));
-            }
+                if (story.isFilledIn()) {
 
-            // If there are no more words to be put in, transfers to the next activity using intent
-            else {
-                Intent secondIntent = new Intent(WordsActivity.this, DisplayActivity.class);
-                secondIntent.putExtra("story_chosen", story);
-                startActivity(secondIntent);
+                        // If there are no more words to be put in, transfers to the next activity using intent
+                        Intent secondIntent = new Intent(WordsActivity.this, DisplayActivity.class);
+                        secondIntent.putExtra("story_chosen", story);
+                        startActivity(secondIntent);
+                }
             }
         }
     }
