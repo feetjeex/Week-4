@@ -14,29 +14,22 @@ import java.io.InputStream;
 
 public class WordsActivity extends AppCompatActivity {
 
-    private static final String TAG = "StartActivity";
-
-    String storyPicked;
-    String wordLeft;
     Story story;
-    Button confirm;
     EditText editText;
     TextView textView;
     int wordsThatLeft;
     InputStream is;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_words);
-        //story.clear();
+        Button confirm;
 
         // Get the intent (which is the MadLib the user selected) from StartActivity and stores it in 'storyPicked'
         Intent intent = getIntent();
+        String storyPicked;
         storyPicked = (String) intent.getSerializableExtra("story_chosen");
-        Log.d(TAG, "Story Picked: " + storyPicked);
 
         // Assigning the ok button
         confirm = findViewById(R.id.okAfterInput);
@@ -104,11 +97,9 @@ public class WordsActivity extends AppCompatActivity {
             wordsThatLeft = story.getPlaceholderRemainingCount();
 
             // Loop to keep prompting the user for a new input as long as the placeholder remaining count is positive
-            Log.d(TAG, "onClick:" + story.getPlaceholderRemainingCount());
             if (story.getPlaceholderRemainingCount() > 0) {
                 String words = editText.getText().toString();
                 story.fillInPlaceholder(words);
-                Log.d(TAG, "onClick:" + story.getPlaceholderRemainingCount());
                 editText.setText("");
                 editText.setHint(story.getNextPlaceholder());
                 textView.setText(String.valueOf(story.getPlaceholderRemainingCount()));
@@ -131,6 +122,4 @@ public class WordsActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
-
-
 }

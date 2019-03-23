@@ -12,12 +12,12 @@ import android.widget.Spinner;
 public class StartActivity extends AppCompatActivity  {
 
     Spinner spinner;
-    String[] objects = {"Simple", "Tarzan", "University", "Clothes", "Dance"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        String[] objects = {"Simple", "Tarzan", "University", "Clothes", "Dance"};
 
         // Declare and initialize the new Adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, objects);

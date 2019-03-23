@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 public class DisplayActivity extends AppCompatActivity {
 
-    Button backButton;
     Story story;
     String storyPicked;
     TextView textView;
@@ -20,6 +19,7 @@ public class DisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying);
+        Button backButton;
 
         // Implements the textView
         textView = findViewById(R.id.story);
